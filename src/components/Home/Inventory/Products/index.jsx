@@ -67,6 +67,8 @@ export const Component = () => {
   };
 
   const addHandler = async (form) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     const formData = transformJSONtoFormData(form);
     submit(formData, {
       encType: "multipart/form-data",

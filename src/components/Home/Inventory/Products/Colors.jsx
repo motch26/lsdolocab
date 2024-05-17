@@ -1,18 +1,35 @@
-import { Box, Button, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  TextField,
+} from "@mui/material";
 import React, { useState } from "react";
 import RegularSwatchPicker from "../../../reusables/RegularSwatchPicker";
 import { RemoveCircle } from "@mui/icons-material";
 
-const ColorForm = ({ saveHandler }) => {
+const ColorForm = ({ saveHandler, hasSizes }) => {
   const [colors, setColors] = useState([]);
   const [colorName, setColorName] = useState("");
 
   const [swatchesOpen, setSwatchesOpen] = useState(false);
+  const [sizes, setSizes] = useState({
+    men: false,
+    women: false,
+  });
 
   const handleChange = (e) => {
     setColorName(e.target.value);
   };
 
+  const handleCheckboxChange = (e) => {
+    setSizes((prev) => ({
+      ...prev,
+      [e.target.value]: e.target.checked,
+    }));
+  };
   const openSwatches = () => {
     setSwatchesOpen(true);
   };
@@ -31,10 +48,15 @@ const ColorForm = ({ saveHandler }) => {
   };
 
   const saveColor = () => {
-    saveHandler({ name: colorName, colorCodes: colors });
+    saveHandler({ name: colorName, colorCodes: colors, sizes });
     setColorName("");
     setColors([]);
+    setSizes({
+      men: false,
+      women: false,
+    });
   };
+
   return (
     <Box
       sx={{
@@ -59,6 +81,7 @@ const ColorForm = ({ saveHandler }) => {
               sx={{
                 bgcolor: color,
                 height: "100%",
+                minHeight: 50,
                 flexGrow: 1,
                 position: "relative",
                 border: 1,
@@ -76,12 +99,35 @@ const ColorForm = ({ saveHandler }) => {
 
           <Button
             variant="outlined"
-            sx={{ flexGrow: 1, display: colors.length < 2 ? "block" : "none" }}
+            sx={{
+              flexGrow: 1,
+              display: colors.length < 2 ? "block" : "none",
+            }}
             onClick={openSwatches}
+            size="large"
           >
             Add Swatch
           </Button>
         </Box>
+
+        {hasSizes && (
+          <Box>
+            <FormGroup row>
+              <FormControlLabel
+                control={<Checkbox checked={sizes.women} />}
+                label="Women Size"
+                value={"women"}
+                onChange={handleCheckboxChange}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={sizes.men} />}
+                label="Men Size"
+                value={"men"}
+                onChange={handleCheckboxChange}
+              />
+            </FormGroup>
+          </Box>
+        )}
       </Box>
       <Button variant="outlined" fullWidth onClick={saveColor}>
         Save Color
@@ -94,7 +140,7 @@ const ColorForm = ({ saveHandler }) => {
     </Box>
   );
 };
-const Colors = ({ colors, colorHandler, removeColor }) => {
+const Colors = ({ colors, colorHandler, removeColor, hasSizes }) => {
   const saveHandler = (color) => {
     colorHandler(color);
   };
@@ -155,6 +201,20 @@ const Colors = ({ colors, colorHandler, removeColor }) => {
                 <Box sx={{ fontWeight: "bold" }}>Color Codes:</Box>
                 <Box>{color.colorCodes.join(", ")}</Box>
               </Box>
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ fontWeight: "bold" }}>Sizes:</Box>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  {Object.entries(color.sizes).reduce((acc, [size, value]) => {
+                    if (value) {
+                      acc.push(<Box key={size}>{size}</Box>);
+                    }
+                    return acc;
+                  }, [])}
+                  {Object.values(color.sizes).every((value) => !value) && (
+                    <Box>N/A</Box>
+                  )}
+                </Box>
+              </Box>
             </Box>
             <Button sx={{ ml: "auto" }} onClick={() => removeColor(index)}>
               <RemoveCircle />
@@ -163,7 +223,7 @@ const Colors = ({ colors, colorHandler, removeColor }) => {
         </Box>
       ))}
 
-      <ColorForm saveHandler={saveHandler} />
+      <ColorForm saveHandler={saveHandler} hasSizes={hasSizes} />
     </Box>
   );
 };

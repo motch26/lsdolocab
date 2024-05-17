@@ -141,6 +141,8 @@ export const Component = () => {
   };
 
   const editHandler = (user) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     setLastAction("edit");
     submit(
       {
@@ -156,6 +158,8 @@ export const Component = () => {
   };
 
   const resetHandler = (user) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     setLastAction("reset");
     submit(
       {
@@ -171,6 +175,8 @@ export const Component = () => {
   };
 
   const deleteHandler = (user) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     setLastAction("delete");
     submit(
       {
@@ -186,6 +192,8 @@ export const Component = () => {
   };
 
   const addHandler = (user) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     setLastAction("add");
     submit(
       {
@@ -201,6 +209,8 @@ export const Component = () => {
   };
 
   const searchHandler = () => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     if (search === "") setFilteredUsers(users);
     else {
       setLastAction("search");

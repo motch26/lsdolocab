@@ -269,6 +269,7 @@ const AddProduct = ({ open, dialogsCloseHandler, addHandler, types }) => {
                   colors={form.colors}
                   colorHandler={colorHandler}
                   removeColor={removeColor}
+                  hasSizes={form.hasSizes}
                 />
               </Grid>
               <Grid item xs={12}>

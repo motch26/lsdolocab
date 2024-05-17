@@ -89,6 +89,8 @@ export const Component = () => {
       : "";
 
   const editHandler = async (form) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     form._id = product._id;
     form.updatedBy = getFromLocalStorage("ls_user").name;
     form.action = "editProduct";
@@ -100,6 +102,8 @@ export const Component = () => {
   };
 
   const deleteHandler = async (_id) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     const form = {};
     form._id = _id;
     form.action = "deleteProduct";
@@ -117,6 +121,8 @@ export const Component = () => {
   };
 
   const saveStocksHandler = async (form) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
+
     form.variantId = form._id;
     form._id = product._id;
     form.stocks = parseInt(form.stocks);

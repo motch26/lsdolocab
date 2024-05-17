@@ -8,6 +8,8 @@ import {
   DialogTitle,
   FormControl,
   Grid,
+  IconButton,
+  Input,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -20,7 +22,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Colors from "../Colors";
 import { toSentenceCase } from "../../../../../utils/strings";
-
+import { RemoveCircle } from "@mui/icons-material";
+const { VITE_API_URL } = import.meta.env;
 const EditProduct = ({
   open,
   dialogsCloseHandler,
@@ -38,6 +41,11 @@ const EditProduct = ({
         sellPrice: product.sellPrice[product.sellPrice.length - 1]?.price,
         colors: product.colors,
         hasSizes: product.variants.some((variant) => variant.size !== null),
+        dataURLs: product.images.map((image) => {
+          const imgLink = `${VITE_API_URL}/uploads/${product.category}/${image}`;
+          return imgLink;
+        }),
+        images: [],
       }
     : {
         model: "",
@@ -48,6 +56,8 @@ const EditProduct = ({
         sellPrice: "",
         colors: [],
         hasSizes: false,
+        images: [],
+        dataURLs: [],
       };
   const [form, setForm] = useState({
     ...filteredProduct,
@@ -104,7 +114,8 @@ const EditProduct = ({
   const removeImage = (index) => {
     setForm((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index),
+      // images: prev.images.filter((_, i) => i !== index),
+      dataURLs: prev.dataURLs.filter((_, i) => i !== index),
     }));
   };
   const closeDialog = () => {
@@ -285,6 +296,7 @@ const EditProduct = ({
                   Colors
                 </Typography>
                 <Colors
+                  hasSizes={form.hasSizes}
                   colors={form.colors}
                   colorHandler={colorHandler}
                   removeColor={removeColor}
@@ -306,23 +318,28 @@ const EditProduct = ({
               </Grid> */}
             </Grid>
             {/* <Grid container item xs={4}>
-              {form.dataURLs.map((image, index) => (
-                <Grid item xs={12} key={index}>
-                  <Box sx={{ position: "relative" }}>
-                    <img
-                      style={{ width: "100%", height: 150, objectFit: "cover" }}
-                      src={image}
-                      alt={`Preview ${index}`}
-                    />
-                    <IconButton
-                      sx={{ position: "absolute", top: 0, right: 0 }}
-                      onClick={() => removeImage(index)}
-                    >
-                      <RemoveCircle />
-                    </IconButton>
-                  </Box>
-                </Grid>
-              ))}
+              {form.dataURLs.length &&
+                form.dataURLs.map((image, index) => (
+                  <Grid item xs={12} key={index}>
+                    <Box sx={{ position: "relative" }}>
+                      <img
+                        style={{
+                          width: "100%",
+                          height: 150,
+                          objectFit: "cover",
+                        }}
+                        src={image}
+                        alt={`Preview ${index}`}
+                      />
+                      <IconButton
+                        sx={{ position: "absolute", top: 0, right: 0 }}
+                        onClick={() => removeImage(index)}
+                      >
+                        <RemoveCircle />
+                      </IconButton>
+                    </Box>
+                  </Grid>
+                ))}
             </Grid> */}
           </Grid>
         </Box>

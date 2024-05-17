@@ -187,11 +187,11 @@ const SingleProductLine = ({ products, addProductLineHandler }) => {
                   key={index}
                   control={
                     <Checkbox
-                      checked={product.sizes.includes((index + 35).toString())}
+                      checked={product.sizes.includes((index + 36).toString())}
                     />
                   }
-                  label={(index + 35).toString()}
-                  value={(index + 35).toString()}
+                  label={(index + 36).toString()}
+                  value={(index + 36).toString()}
                   onChange={checkBoxesHandler}
                 />
               ))}

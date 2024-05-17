@@ -43,6 +43,7 @@ export const Component = () => {
   };
 
   const submitEditUser = (form) => {
+    if (!getFromLocalStorage("ls_user").username) navigate("/");
     submit(form, {
       method: "POST",
       encType: "application/json",
